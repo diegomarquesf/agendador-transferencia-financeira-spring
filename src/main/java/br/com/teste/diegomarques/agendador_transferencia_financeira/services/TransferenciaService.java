@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class TransferenciaService {
@@ -26,11 +27,15 @@ public class TransferenciaService {
     public Transferencia agendarTransferencia(TransferenciaRequestDTO dto) {
         Transferencia transferencia = transferenciaMapper.toEntity(dto);
 
-        long dias = calcularDias(transferencia.getDtTransferencia().atStartOfDay().toLocalDate(), dto.getDtTransferencia());
+        long dias = calcularDias(transferencia.getDtAgendamento(), dto.getDtTransferencia());
         BigDecimal taxa = calcularTaxa(dias, dto.getValor());
         transferencia.setTaxa(taxa);
 
         return transferenciaRepository.save(transferencia);
+    }
+
+    public List<Transferencia> findExtrato() {
+        return transferenciaRepository.findAll();
     }
 
     private long calcularDias(LocalDate dataAgendamento, LocalDate dataTransferencia) {

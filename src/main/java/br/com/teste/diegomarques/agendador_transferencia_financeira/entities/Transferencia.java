@@ -1,9 +1,6 @@
 package br.com.teste.diegomarques.agendador_transferencia_financeira.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,7 +19,7 @@ public class Transferencia implements Serializable {
     private BigDecimal taxa;
 
     private LocalDate dtTransferencia;
-    private LocalDate dtAgendamento;
+    private LocalDate dtAgendamento = LocalDate.now();
 
     public Transferencia() {
 

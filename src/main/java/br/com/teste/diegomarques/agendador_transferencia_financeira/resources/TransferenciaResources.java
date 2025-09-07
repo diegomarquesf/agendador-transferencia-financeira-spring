@@ -5,14 +5,12 @@ import br.com.teste.diegomarques.agendador_transferencia_financeira.entities.dto
 import br.com.teste.diegomarques.agendador_transferencia_financeira.services.TransferenciaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/test/tranferencia")
@@ -34,6 +32,12 @@ public class TransferenciaResources {
                 .toUri();
 
         return ResponseEntity.created(uri).body(transferencia);
+    }
+
+    @GetMapping("agendamentos")
+    public ResponseEntity<List<Transferencia>> findExtrato() {
+        List<Transferencia> transferencias = transferenciaService.findExtrato();
+        return ResponseEntity.ok(transferencias);
     }
 
 }
