@@ -4,6 +4,7 @@ import br.com.teste.diegomarques.agendador_transferencia_financeira.entities.Tra
 import br.com.teste.diegomarques.agendador_transferencia_financeira.entities.dtos.TransferenciaRequestDTO;
 import br.com.teste.diegomarques.agendador_transferencia_financeira.entities.mappers.TransferenciaMapper;
 import br.com.teste.diegomarques.agendador_transferencia_financeira.repositories.TransferenciaRepository;
+import br.com.teste.diegomarques.agendador_transferencia_financeira.services.exceptions.TaxaNaoAplicavelException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,11 @@ public class TransferenciaService {
 
         long dias = calcularDias(transferencia.getDtAgendamento(), dto.getDtTransferencia());
         BigDecimal taxa = calcularTaxa(dias, dto.getValor());
-        transferencia.setTaxa(taxa);
 
+        if (taxa == null) {
+            throw new TaxaNaoAplicavelException("Não é possível aplicar uma taxa para a transferência agendada em " + dto.getDtTransferencia());
+        }
+        transferencia.setTaxa(taxa);
         return transferenciaRepository.save(transferencia);
     }
 

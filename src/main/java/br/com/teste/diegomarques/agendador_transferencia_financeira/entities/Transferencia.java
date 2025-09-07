@@ -1,24 +1,42 @@
 package br.com.teste.diegomarques.agendador_transferencia_financeira.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "tb_transferencia_01")
 public class Transferencia implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Column(name = "contaOrigem")
     private String contaOrigem;
+
+    @NotBlank
+    @Column(name = "contaDestino")
     private String contaDestino;
 
+    @NotNull
+    @DecimalMin("0.01")
+    @Column(name = "valor")
     private BigDecimal valor;
+
+    @Column(name = "taxa")
     private BigDecimal taxa;
 
+    @NotNull
+    @Column(name = "dtTransferencia")
     private LocalDate dtTransferencia;
+
+    @Column(name = "dtAgendamento")
     private LocalDate dtAgendamento = LocalDate.now();
 
     public Transferencia() {
