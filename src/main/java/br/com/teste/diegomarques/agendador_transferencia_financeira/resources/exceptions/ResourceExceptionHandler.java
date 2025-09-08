@@ -39,20 +39,20 @@ public class ResourceExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationError> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest request) {
+    public ResponseEntity<ValidationError> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
         ValidationError err = new ValidationError(
                 Instant.now(),
                 HttpStatus.BAD_REQUEST.value(),
                 "Validation Error",
                 "Erro na validação dos campos",
-                request.getDescription(false)
+                request.getRequestURI()
         );
 
         ex.getBindingResult().getFieldErrors().forEach(f -> {
             err.addError(f.getField(), f.getDefaultMessage());
         });
 
-        return ResponseEntity.badRequest().body(err);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
     private ResponseEntity<StandardError> handleExceptionInternal(RuntimeException ex, HttpStatus status, String error, String path) {
